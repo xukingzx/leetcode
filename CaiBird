@@ -1,0 +1,1404 @@
+202-HappyNumber-java
+class Solution {
+    public boolean isHappy(int n) {
+        Set<Integer>set=new HashSet<>();
+        while(n!=1)
+        {
+            if(!set.add(n))
+            {
+                return false;
+            }
+            int value=0;
+            while(n!=0)
+            {
+                value+=(n%10)*(n%10);
+                n/=10;
+            }
+            n=value;
+        }
+        return true;
+    }
+}
+303-简单动态规划问题-java
+class NumArray {
+
+    private int[]dp;
+
+    public NumArray(int[] nums) {
+        if(nums.length==0)
+            return;
+        dp=new int[nums.length];
+        dp[0]=nums[0];
+        for(int i=1;i<dp.length;i++)
+        {
+            dp[i]=nums[i]+dp[i-1];
+        }
+
+    }
+
+    public int sumRange(int i, int j) {
+        return i==0?dp[j]:dp[j]-dp[i-1];
+
+    }
+}
+141-环形链表-java
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null||head.next==null)
+            return false;
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while(slow!=fast){
+            if(fast==null||fast.next==null)
+                return false;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
+    }
+}
+234-回文链表-java
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if(head==null||head.next==null)
+            return true;
+        ListNode fast = head;
+        ListNode slow = head;
+        while(fast.next!=null&&fast.next.next!=null)
+        {
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        slow = reverse(slow.next);
+        while(slow!=null)
+        {
+            if(head.val!=slow.val)
+                return false;
+            head=head.next;
+            slow=slow.next;
+        }
+        return true;
+
+    }
+    private ListNode reverse(ListNode head)
+    {
+        if(head.next==null)
+            return head;
+        ListNode newHead = reverse(head.next);
+        head.next.next=head;
+        head.next=null;
+        return newHead;
+    }
+}
+231-2的幂次-java
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+
+        if(n<=0)
+            return false;
+        if((n&n-1)==0)
+            return true;
+        else
+            return false;
+    }
+}    //3是011，4是100；2是10，1是01.
+344-反转字符串-java
+class Solution {
+    public void reverseString(char[] s) {
+        for(int i=0;i<s.length/2;i++)
+        {
+            char temp=s[i];
+            s[i]=s[s.length-1-i];
+            s[s.length-1-i]=temp;
+        }
+
+    }
+}
+7-整数反转-java
+class Solution {
+    public int reverse(int x) {
+        int rev = 0;
+        while(x!=0){
+            int pop = x % 10;
+             x /= 10;
+            if(rev > Integer.MAX_VALUE/10||(rev==Integer.MAX_VALUE/10&&pop>7))
+                return 0;
+            if(rev < Integer.MIN_VALUE/10||(rev==Integer.MIN_VALUE/10&&pop<-8))
+                return 0;
+                                                     //2^31-1=2147483647,-2^31=-2147483648
+            rev = rev * 10 + pop;
+        }
+        return rev;
+
+    }
+}
+268-缺失数字-java
+class Solution {
+    public int missingNumber(int[] nums) {
+        int res = nums.length;
+        for (int i = 0; i < nums.length; ++i){
+            res ^= nums[i];
+            res ^= i;
+        }
+        return res;
+
+    }
+}   //比较取巧方法，一般用映射做
+628-三个数的最大乘积-java
+class Solution {
+    public int maximumProduct(int[] nums) {
+       int len=nums.length;
+       Arrays.sort(nums);
+       if(nums.length<3){
+           return 0;
+       }
+        return Math.max(nums[len-1]*nums[len-2]*nums[len-3],nums[0]*nums[1]*nums[len-1]);
+
+    }
+}
+448-找到消失的数字-java
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        for(int i=0;i<nums.length;i++)
+            nums[Math.abs(nums[i])-1]=-Math.abs(nums[Math.abs(nums[i])-1]); //把每个nums[i]对应的数组下标的值变为负值
+        List <Integer> list=new ArrayList <Integer>();
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[i]>0)
+                list.add(i+1);
+        }
+        return list;
+    }
+}
+198-打家劫舍-java
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if (n <= 1) return n == 0 ? 0 : nums[0];
+        int[] memo = new int[n];
+        memo[0] = nums[0];
+        memo[1] = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < n; i++)
+            memo[i] = Math.max(memo[i - 1], nums[i] + memo[i - 2]);
+        return memo[n - 1];
+
+    }
+}
+2-两数之和-java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2){
+    ListNode dummyHead = new ListNode(0);
+    ListNode p = l1, q = l2, curr = dummyHead;
+    int carry = 0;
+    while (p != null || q != null) {
+        int x = (p != null) ? p.val : 0;
+        int y = (q != null) ? q.val : 0;
+        int sum = carry + x + y;
+        carry = sum / 10;
+        curr.next = new ListNode(sum % 10);
+        curr = curr.next;
+        if (p != null) p = p.next;
+        if (q != null) q = q.next;
+    }
+    if (carry > 0) {
+        curr.next = new ListNode(carry);
+    }
+    return dummyHead.next;
+    }
+}
+283-移动0-java
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int i = 0,j = 0;
+        for(i = 0; i < nums.length; i++)
+        {
+            if(nums[i] != 0)
+            {
+                nums[j++] = nums[i];
+            }
+        }
+        while(j < nums.length)
+        {
+            nums[j++] = 0;
+        }
+    }
+}
+136-只出现一次的数字-java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int result = 0;
+        for(int i = 0; i < nums.length; i++)
+        {
+            result ^=nums[i];
+        }
+        return result;
+    }
+}
+1037-回旋镖-java
+class Solution {
+    public boolean isBoomerang(int[][] points) {
+       return (points[0][0] * (points[1][1] - points[2][1]) + points[1][0] * (points[2][1] - points[0][1]) + points[2][0] * (points[0][1] - points[1][1])) != 0;
+        //三角形行列式求面积公式
+    }
+}
+349-两个数组的交集-java
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        Set<Integer> set1 = new HashSet<Integer>();
+        for (int num : nums1) {
+            set1.add(num);
+        }
+        int idx = 0;
+        for (int i = 0; i < nums2.length; i++) {
+            if (set1.contains(nums2[i])) {
+                nums2[idx++] = nums2[i];
+                set1.remove(nums2[i]);
+            }
+        }
+        return Arrays.copyOfRange(nums2, 0, idx);
+
+    }
+}
+83-删除排序链表中的重复元素-java
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode last = head;
+        ListNode next = null;
+        if(last != null)
+        {
+            next = last.next;
+        }
+        while(next != null)
+        {
+            if(next.val == last.val)
+                last.next = next.next;
+            else
+                last = next;
+            next = last.next;
+        }
+        return head;
+    }
+}
+21-合并两个有序链表-java
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dummyHead = new ListNode(0);
+        ListNode cur = dummyHead;
+        while(l1 != null && l2 != null)
+        {
+            if(l1.val < l2.val)
+            {
+                cur.next = l1;
+                l1 = l1.next;
+                cur = cur.next;
+            }
+            else
+            {
+                cur.next = l2;
+                cur = cur.next;
+                l2 = l2.next;
+            }
+        }
+        if(l1 == null)
+            cur.next = l2;
+        if(l2 == null)
+            cur.next = l1;
+         return dummyHead.next;
+    }
+}
+455-分发蛋糕-java
+class Solution {
+    public int findContentChildren(int[] g, int[] s) {
+        int child = 0;
+        int cookie = 0;
+        Arrays.sort(g);
+        Arrays.sort(s);
+        while(child < g.length && cookie <s.length)
+        {
+            if(g[child] <= s[cookie])
+                child++;
+            cookie++;
+        }
+        return child;
+    }
+}
+441-排列硬币-java
+class Solution {
+    public int arrangeCoins(int n) {
+        int i = 0;
+        while(i <= n)
+        {
+            n = n - i;
+            if(n < 0)
+                break;
+            i++;
+        }
+        return i - 1;
+    }
+}
+561-数组拆分I-java
+class Solution {
+    public int arrayPairSum(int[] nums) {
+        Arrays.sort (nums);
+        int ans = 0;
+        for(int i = 0; i < nums.length / 2; i++)
+        {
+            ans += nums[i*2];
+        }
+        return ans;
+    }
+}
+746-使用最小花费爬楼梯-java
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[]dp = new int[n];
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for(int i = 2; i<n; i++)
+        {
+            dp[i]=Math.min(dp[i-1],dp[i-2]) + cost[i];
+        }
+        return Math.min(dp[n-1],dp[n-2]);
+    }
+}
+1025-除数博弈-java
+class Solution {
+    public boolean divisorGame(int N) {
+        if(N % 2 == 0)
+            return true;
+        else
+            return false;
+    }
+}
+278-第一个版本错误的数字-java
+public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        int l = 1;
+        int r = n;
+        while (l < r) {
+            int mid = l + (r - l) / 2;   //mid = (l + r) / 2; 容易溢出
+            if (isBadVersion(mid)) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return r;
+    }
+}
+191-位1的个数
+public class Solution {
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int count = 0;
+        for(int i = 0; i < 32; i++)
+        {
+            if(((n>>i)&1) == 1)
+                count ++;
+        }
+        return count;
+    }
+}
+726-二进制表示中质数个计算置位-java
+class Solution {
+    public int countPrimeSetBits(int L, int R) {
+        int resCount = 0;
+        for (int num = L; num <= R; ++num){
+            int tempNum = num, tempCount = 0;
+            while (tempNum != 0){
+                tempNum &= (tempNum - 1);
+                tempCount += 1;
+            }
+            if (isPrime(tempCount)){
+                resCount += 1;
+            }
+        }
+        return resCount;
+    }
+
+   private boolean isPrime(int num){
+        if (num < 2){
+            return false;
+        }
+        for (int i = (int)(Math.sqrt(num)); i > 1; --i){
+            if (num % i == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+137-只出现一次的数字-java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int a = 0, b = 0;
+        for(int x = 0; x < nums.length; x++)
+        {
+            b = (b ^ nums[x]) & ~a;
+            a = (a ^ nums[x]) & ~b;
+        }
+        return b;
+    }
+}
+237-删除链表中的节点-java
+class Solution {
+    public void deleteNode(ListNode node) {
+        node.val=node.next.val;
+        node.next=node.next.next;
+    }
+}
+203-移除链表元素-java
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+       if(head == null)
+           return null;
+        ListNode p = head;
+        ListNode q = p.next;
+
+        while(q != null)
+        {
+            if(q.val==val)
+            {
+                p.next=q.next;
+                q=q.next;
+            }
+            else
+            {
+                p=q;
+                q=p.next;
+            }
+        }
+        if(head.val==val)
+        {
+            return head.next;
+        }
+
+        return head;
+    }
+}
+160-相交链表-java
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if(headA == null || headB == null)
+            return null;
+        ListNode pA = headA, pB = headB;
+        while(pA != pB)
+        {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
+        }
+        return pA;
+    }
+}
+876-链表的中间节点-java
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while(fast.next != null && fast.next.next != null)
+        {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return fast.next == null ? slow : slow.next;
+
+    }
+}
+19-删除链表的第k个节点-java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+         if( head == null){
+            return null;
+        }
+        ListNode temp = new ListNode(0);
+        temp.next = head;
+        ListNode l = temp;
+        ListNode r = head;
+        head = temp;
+        for(int i = 0; i < n; i++){
+            r = r.next;
+        }
+        while(r != null){
+            r = r.next;
+            l = l.next;
+        }
+        l.next = l.next.next;
+        return head.next;
+    }
+}
+922-按奇偶排序数组2-java
+class Solution {
+    public int[] sortArrayByParityII(int[] A) {
+        int i = 0;
+        int j = 1;
+        while (j < A.length && i < A.length) {
+            if (A[i] % 2 == 0) {
+                i += 2;
+            } else {
+                while (A[j] % 2 != 0 && j < A.length) {
+                    j += 2;
+                }
+                if (j < A.length) {
+                    int temp = A[i];
+                    A[i] = A[j];
+                    A[j] = temp;
+                }
+            }
+        }
+        return A;
+    }
+}
+350-两个数组的交集2-java
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        List<Integer> list = new ArrayList<>();
+        for(int i = 0, j = 0; i < nums1.length && j < nums2.length;)
+        {
+            if(nums1[i] < nums2[j])
+                i++;
+            else if(nums1[i] > nums2[j])
+                j++;
+            else{
+                list.add(nums1[i]);
+                i++;
+                j++;
+            }
+        }
+        int [] res = new int[list.size()];
+        for(int i = 0; i < list.size(); i++)
+        {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+}
+976-三角形的最大周长-java
+class Solution {
+    public int largestPerimeter(int[] A) {
+        Arrays.sort(A);
+        for(int i = A.length - 1; i >= 2; i--)
+        {
+            int a = A[i];
+            int b = A[i-1];
+            int c = A[i-2];
+            if(a < b + c)
+            {
+                return a + b + c;
+            }
+        }
+        return 0;
+    }
+}
+33-搜索旋转排序数组-java
+class Solution {
+    public int search(int[] nums, int target) {
+        return search(nums, 0, nums.length - 1, target);
+    }
+
+    private int search(int[] nums, int low, int high, int target) {
+        if (low > high)
+            return -1;
+        int mid = (low + high) / 2;
+        if (nums[mid] == target)
+            return mid;
+        if (nums[mid] < nums[high]) {
+            if (nums[mid] < target && target <= nums[high])
+                return search(nums, mid + 1, high, target); //中间数小于目标数且目标数小于等于最右边数，则在中间数右边找
+            else
+                return search(nums, low, mid - 1, target); //中间数大于目标数或者目标数大于最右边数，则在中间数左边找
+        } else {
+            if (nums[low] <= target && target < nums[mid])
+                return search(nums, low, mid - 1, target);
+            else
+                return search(nums, mid + 1, high, target);
+        }
+    }
+}
+48-旋转图像-java
+class Solution {
+    public void rotate(int[][] matrix) {
+        int abs1 = 0;
+        int abs2 = matrix.length - 1;
+        while (abs1 <= abs2) {
+            int p1 = abs1;
+            int p2 = abs2;
+            while (p1 != abs2) {
+                int temp = matrix[abs1][p1];
+                matrix[abs1][p1] = matrix[p2][abs1];
+                matrix[p2][abs1] = matrix[abs2][p2];
+                matrix[abs2][p2] = matrix[p1][abs2];
+                matrix[p1][abs2] = temp;               //最外面先换，再换里面
+                p1 += 1;
+                p2 -= 1;
+            }
+            abs1 += 1;
+            abs2 -= 1;
+        }
+}
+}
+566-重塑矩阵-java
+class Solution {
+    public int[][] matrixReshape(int[][] nums, int r, int c) {
+        int row = nums.length, col = nums[0].length;
+        if (row * col != r * c)
+            return nums;
+        int [][] res = new int[r][c];
+        int index = 0;
+        for (int i = 0; i < r; i++){
+            for (int j = 0; j < c; j++){
+                res[i][j] = nums[index / col][index % col];
+                index ++;
+            }
+        }
+        return res;
+    }
+}
+1033-移动石子直到连续-java
+class Solution {
+    public int[] numMovesStones(int a, int b, int c) {
+        int max, min;
+        min = Math.min(a, Math.min(b, c));
+        max = Math.max(a, Math.max(b, c));
+        b = a + b + c - max - min;
+        a= min;
+        c = max;
+
+        if (Math.abs(b - a) == 1 && Math.abs(c - b) == 1)
+        {
+            return new int[]{0, 0};
+        }
+        else if (Math.abs(b - a) <= 2 || Math.abs(c - b) <= 2)
+        {
+            return new int[]{1, c - a-2};
+        }
+        else
+        {
+            return new int[]{2, c - a-2};
+        }
+
+    }
+}
+985-查询后的偶数和-java
+    public int[] sumEvenAfterQueries(int[] A, int[][] queries) {
+        int[] res = new int[A.length];
+        int sum = 0;
+        for(int i = 0; i < A.length; i++){
+            if(A[i] % 2 == 0){
+                sum += A[i];
+            }
+        }
+        for(int i = 0; i < A.length; i++){
+            int val = queries[i][0];
+            int index = queries[i][1];
+            if(A[index] % 2 == 0){
+                if(val % 2 == 0){
+                    sum += val;
+                }else{
+                    sum -= A[index];
+                }
+            }else{
+               if(val % 2 != 0){
+                    sum = sum + A[index] + val;
+                }
+            }
+            A[index] += val;
+            res[i] = sum;
+        }
+        return res;
+    }
+}
+229-求众数2-java
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        if(nums.length==0)
+            return result;
+        if(nums.length==1)
+        {
+            result.add(nums[0]);
+            return result;
+        }
+        int m = nums[0];
+        int n = nums[1];
+        int countM = 0;
+        int countN = 0;
+        for(int i = 0;i < nums.length; i++)
+        {
+            if(countM == 0 && n != nums[i])
+                m = nums[i];
+            else if(countN ==0 && m != nums[i])
+                n = nums[i];
+            if(nums[i] == m)
+                countM ++;
+            else if(nums[i] == n && m!=n)
+                countN ++;
+            else{
+                countM --;
+                countN --;
+            }
+        } // 摩尔投票法选出出现次数最多的两个数 m,n
+        countM = 0;
+        countN = 0;
+        for(int i = 0; i < nums.length; i++)
+        {
+            if(nums[i] == m)
+                countM ++;
+            else if(nums[i] == n)
+                countN ++;
+        }
+         if(countM > nums.length/3)
+            result.add(m);
+         if(countN > nums.length/3)
+            result.add(n);
+        return result;
+    }
+}
+674-最长连续递增子序列-java
+class Solution {
+    public int findLengthOfLCIS(int[] nums) {
+        if(nums.length == 0)
+            return 0;
+        int m = 0, n = 1;
+        for(int i = 1; i < nums.length; i++)
+        {
+            if(nums[i] > nums[i-1])
+                n++;
+            else
+            {
+                m = Math.max(m,n);
+                n = 1;
+            }
+        }
+        return Math.max(m,n);
+    }
+}
+860-柠檬水找零-java
+class Solution {
+    public boolean lemonadeChange(int[] bills) {
+        int nums1 = 0;  //五元的个数
+        int nums2 = 0;  //十元的个数
+        for(int i = 0 ; i < bills.length ; i++)
+        {
+            if(bills[i] == 5)
+                nums1++;
+            else if(bills[i] == 10 && nums1 > 0)
+            {
+                nums1--;
+                nums2++;
+            }
+            else if(bills[i] == 20 && nums1 > 0 && nums2 > 0)
+            {
+                nums1--;
+                nums2--;
+            }
+            else if(bills[i] == 20 && nums1 >=3)
+            {
+                nums1 -= 3;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+1005-K次取反后最大化的数组值-java
+class Solution {
+    public int largestSumAfterKNegations(int[] A, int K) {
+        Arrays.sort(A);
+        for(int i = 0 ; i < A.length ; i++)
+        {
+            if(A[i] < 0 && K > 0)
+            {
+                A[i] = -A[i];
+                K--;
+            }
+        }
+        Arrays.sort(A);
+        if(K % 2 != 0)
+            A[0] = -A[0];
+        int result = 0;
+        for(int i = 0 ; i < A.length ; i++)
+        {
+            result += A[i];
+        }
+        return result;
+    }
+}
+54-螺旋矩阵-java
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> list = new ArrayList<>();
+        if(matrix.length == 0 || matrix[0].length == 0)
+            return list;
+        int y1 = 0, y2 = matrix.length - 1;
+        int x1 = 0, x2 = matrix[0].length - 1;
+
+        while(y1 <= y2 && x1 <= x2)
+        {
+            for(int i = x1; i <= x2; i++)
+            {
+                list.add(matrix[y1][i]);
+            }
+            if(y1 == y2) break;
+            y1++;
+
+            for(int j = y1; j <= y2; j++)
+            {
+                list.add(matrix[j][x2]);
+            }
+            if(x1 == x2) break;
+            x2--;
+
+            for(int i = x2; i >= x1; i--)
+            {
+                list.add(matrix[y2][i]);
+            }
+            if(y1 == y2) break;
+            y2--;
+
+            for(int j = y2; j >= y1; j--)
+            {
+                list.add(matrix[j][x1]);
+            }
+            if(x1 == x2) break;
+            x1++;
+        }
+        return list;
+    }
+}
+788-旋转数字-java
+class Solution {
+    private int[] ans = {0,0,1,-1,-1,1,1,-1,0,1};
+    public int rotatedDigits(int N) {
+        int count = 0;
+        for(int i = 1; i <= N; i++)
+        {
+            if(istrue(i))
+                count++;
+        }
+        return count;
+    }
+    private boolean istrue(int i)
+    {
+        int m = 0;
+        while(i > 0)
+        {
+            int mod = i % 10;
+            m |= ans[mod];
+            i = i / 10;
+        }
+        return m > 0;
+    }
+}
+961-重复n次的数-java
+class Solution {
+    public int repeatedNTimes(int[] A) {
+    if(A[0] == A[1]) return A[0];
+    if(A[0] == A[2]) return A[0];
+    if(A[2] == A[1]) return A[1];
+    int i;
+    for( i = 3; i < A.length-2; i = i + 2)
+    {
+       if(A[i] == A[i+1])
+       {
+           return A[i];
+       }
+    }
+    return A[i];
+    }
+}
+1010-总持续时间可被60整除的歌曲-java
+class Solution {
+    public int numPairsDivisibleBy60(int[] time) {
+        int[] result = new int[60];
+        int res = 0;
+        for(int t = 0; t < time.length; t++)
+        {
+            time[t] = time[t] % 60;
+            int index = time[t] == 0 ? 0 : (60 - time[t]);
+            res += result[index];
+            result[time[t]]++; //取余后找60-余数的位置是否有存数，无存数就无法满足，然后把取余后存入
+        }
+        return res;
+    }
+}
+495-timo攻击-java
+class Solution {
+    public int findPoisonedDuration(int[] timeSeries, int duration) {
+        if(timeSeries.length == 0)
+            return 0;
+        int count = 0;
+        for(int i = 0; i < timeSeries.length - 1; i++)
+        {
+            if(timeSeries[i] + duration < timeSeries[i+1])
+                count += duration;
+            else
+                count += timeSeries[i+1] - timeSeries[i];
+        }
+        count += duration;
+        return count;
+    }
+}
+1051-高度检查器-java
+class Solution {
+    public int heightChecker(int[] heights) {
+        int[] a = Arrays.copyOf(heights, heights.length);
+        Arrays.sort(a);
+        int diff = 0;
+        for (int i = 0; i < heights.length; i++)
+        {
+            if (a[i] != heights[i])
+                diff++;
+        }
+        return diff;
+
+    }
+}
+？？？-有效的山脉数组-java
+class Solution {
+    public boolean validMountainArray(int[] A) {
+        if(A.length <= 2)
+            return false;
+        int i = 0;
+        while(i < A.length - 1 && A[i] < A[i+1])
+        {
+            i++;
+        }
+        if(i == A.length - 1 || i == 0)
+            return false;
+        while(i < A.length - 1 && A[i+1] < A[i])
+        {
+            i++;
+        }
+        if(i == A.length - 1)
+            return true;
+        else
+            return false;
+
+       }
+}
+59-螺旋矩阵2-java
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int matrix[][] = new int[n][n];
+        int y1 = 0,y2 = n - 1;
+        int x1 = 0,x2 = n - 1;
+        int c = 1;
+        while(y1 <= y2 && x1 <= x2)
+        {
+            for(int i = x1; i <= x2; i++)
+            {
+                matrix[y1][i] = c++;
+            }
+            if(y1 == y2) break;
+            y1++;
+
+            for(int j = y1; j <= y2; j++)
+            {
+                matrix[j][x2] = c++;
+            }
+            if(x1 == x2) break;
+            x2--;
+
+            for(int i = x2; i >= x1; i--)
+            {
+               matrix[y2][i] = c++;
+            }
+            if(y1 == y2) break;
+            y2--;
+
+            for(int j = y2; j >= y1; j--)
+            {
+                matrix[j][x1] = c++;
+            }
+            if(x1 == x2) break;
+            x1++;
+        }
+        return matrix;
+    }
+}
+997-找到小镇的法官-java
+class Solution {
+    public int findJudge(int N, int[][] trust) {
+        int[] trusts = new int[N + 1];
+        int[] trusted = new int [N + 1];
+
+        for(int i = 0; i < trust.length; i++)
+        {
+            trusts[trust[i][0]]++;
+            trusted[trust[i][1]]++;
+        }
+
+        for(int i = 1; i <= N; i++)
+        {
+            if(trusts[i] == 0)
+            {
+                if(trusted[i] == N - 1)
+                    return i;
+            }
+        }
+        return -1;
+    }
+}
+101-对称二叉树-java
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+    return isMirror(root, root);
+}
+public boolean isMirror(TreeNode t1, TreeNode t2) {
+    if (t1 == null && t2 == null) return true;
+    if (t1 == null || t2 == null) return false;
+    return (t1.val == t2.val)
+        && isMirror(t1.right, t2.left)
+        && isMirror(t1.left, t2.right);
+}
+ }
+ 100-相同的树-java
+ class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p==null && q==null) return true;
+        if (p==null && q!=null) return false;
+        if (p!=null && q==null) return false;
+        if (p.val!=q.val) return false;
+        return (isSameTree(p.left,q.left)&&isSameTree(p.right,q.right));
+    }
+}
+226-翻转二叉树-java
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+    if (root == null) {
+        return null;
+    }
+    TreeNode right = invertTree(root.right);
+    TreeNode left = invertTree(root.left);
+    root.left = right;
+    root.right = left;
+    return root;
+    }
+}
+104-二叉树深度-java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        return root == null ? 0 : Math.max(maxDepth(root.left),maxDepth(root.right))+1;
+    }
+}
+111-二叉树的最小深度-java
+class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        if (root.left == null && root.right != null)
+        {
+            return minDepth(root.right) + 1;
+        }
+        if (root.right == null && root.left != null)
+        {
+            return minDepth(root.left) + 1;
+        }
+            return Math.min(minDepth(root.left),minDepth(root.right)) + 1;
+    }
+}
+112-路径总和-java
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if(root == null)
+            return false;
+        if(root.left == null && root.right == null)
+        {
+            return sum - root.val == 0;
+        }
+        return hasPathSum(root.left,sum - root.val)||hasPathSum(root.right,sum -root.val);
+    }
+}
+997-java
+class Solution {
+    public int sumSubarrayMins(int[] A) {
+        Stack<Integer> s = new Stack<>();
+        int n = A.length, res = 0, mod = (int)1e9 + 7, j,k;
+        for (int i = 0; i <= n; i++) {
+            while (!s.isEmpty() && A[s.peek()] > (i == n ? 0 : A[i])) {
+                j = s.pop();
+                k = s.isEmpty() ? -1 : s.peek();
+                res = (res + A[j] * (i - j) * (j - k)) % mod;
+            }
+            s.push(i);
+        }
+        return res;
+
+    }
+}
+965-java
+class Solution {
+    public boolean isUnivalTree(TreeNode root) {
+        if(root == null)
+            return true;
+        if(root.left != null && root.left.val != root.val)
+            return false;
+        if(root.right != null && root.right.val != root.val)
+            return false;
+        return isUnivalTree(root.left) && isUnivalTree(root.right);
+    }
+}
+300-java
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int len = nums.length;
+
+        if (len < 2)
+        {
+            return len;
+        }
+        int[] dp = new int[len];
+
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < len; i++)
+        {
+
+            for (int j = 0; j < i; j++)
+            {
+                if (nums[j] < nums[i])
+                {
+                    dp[i] = Math.max(dp[j] + 1, dp[i]);
+                }
+            }
+        }
+
+        int res = dp[0];
+        for (int i = 0; i < len; i++) {
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+
+    }
+}
+64-java
+class Solution {
+    public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int [][]dp = new int[m][n];
+        dp[0][0] = grid[0][0];
+        for(int i = 1; i < m; i++)
+        {
+            dp[i][0] = dp[i-1][0] + grid[i][0];
+        }
+        for(int j = 1; j < n; j++)
+        {
+            dp[0][j] = dp[0][j-1] + grid[0][j];
+        }
+        for(int i = 1; i < m; i++)
+            for(int j = 1; j < n; j++)
+            {
+                dp[i][j] = Math.min(dp[i-1][j],dp[i][j-1]) + grid[i][j];
+            }
+        return dp[m-1][n-1];
+    }
+}
+三数之和-java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        final List<List<Integer>> res = new ArrayList<>();
+        if (nums.length == 0) return res;
+        Arrays.sort(nums);
+        if (nums[0] <= 0 && nums[nums.length - 1] >= 0)
+        {
+            for (int i = 0; i < nums.length - 2;)
+            {
+                if (nums[i] > 0) break;
+                int l = i + 1;
+                int r = nums.length - 1;
+
+                do
+                {
+                    int sum = nums[i] + nums[l] + nums[r];
+                    if (sum == 0)
+                    {
+                        res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+
+                    }
+                    if (sum >= 0)
+                    {
+                        while (nums[r] == nums[--r] && r > l);
+                    }
+                    else
+                    {
+                        while (nums[l] == nums[++l] && r > l);
+                    }
+                }while (r > l);
+
+                while(nums[i] == nums[++i] && i < nums.length - 2);
+
+            }
+        }
+        return res;
+    }
+}
+四数之和-java
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+       List<List<Integer>> result = new ArrayList<>();
+
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length - 3; i ++)
+        {
+
+            if (i != 0 && nums[i] == nums[i-1])
+            {
+                continue;
+            }
+
+            for (int j = i + 1; j < nums.length - 2; j ++)
+            {
+                if (j != i + 1 && nums[j] == nums[j-1])
+                {
+                    continue;
+                }
+
+                int left = j + 1;
+                int right = nums.length -1;
+
+                while (left < right)
+                {
+
+                    if ((left != j + 1 && nums[left] == nums[left-1]) || nums[i] + nums[j] + nums[left] + nums[right] < target)
+                    {
+                        left ++;
+                    } else if ((right != nums.length -1 && nums[right] == nums[right + 1]) || nums[i] + nums[j] + nums[left] + nums[right] > target)
+                    {
+                        right --;
+                    }
+                    else
+                    {
+                        List<Integer> list = new ArrayList<>();
+                        list.add(nums[i]);
+                        list.add(nums[j]);
+                        list.add(nums[left]);
+                        list.add(nums[right]);
+
+                        result.add(list);
+                        left ++;
+                        right --;
+                    }
+                }
+
+            }
+        }
+        return result;
+    }
+}
+328-java
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode o = head;
+        ListNode p = head.next;
+        ListNode e = p;
+        while(o.next != null && e.next != null)
+        {
+            o.next = e.next;
+            o = o.next;
+            e.next = o.next;
+            e = e.next;
+        }
+        o.next = p;
+        return head;
+    }
+}
+46-java
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        core(nums, 0, res);
+        return res;
+    }
+
+    private static void core(int[] nums, int index, List<List<Integer>> res) {
+            for (int i = index; i < nums.length; i++) {
+            if (index == nums.length - 1) {
+                List<Integer> list = new ArrayList<>();
+                for (int j = 0; j < nums.length; j++) {
+                    list.add(nums[j]);
+                }
+                res.add(list);
+            }
+            swap(nums, i, index);
+            core(nums, index + 1, res);
+            swap(nums, i, index);
+        }
+    }
+
+    private static void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+链表交换-java
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        ListNode next = head.next;
+        head.next = swapPairs(next.next);
+        next.next = head;
+        return next;
+    }
+}
+89-最大面积-java
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        ArrayList<Integer> heightList = new ArrayList();
+        for(int i = 0; i < heights.length; i++)
+            heightList.add(heights[i]);
+        heightList.add(0);
+        int maxArea = 0;
+
+        Stack<Integer> stack = new Stack<Integer>(); //单调栈
+
+        for(int i = 0; i < heightList.size(); i++){
+        while(!stack.empty() && (heightList.get(i) < heightList.get(stack.peek())) ){
+          int peek = stack.peek();
+          stack.pop();
+          maxArea = Math.max(maxArea,heightList.get(peek)*(stack.empty()?i:(i-stack.peek()-1)));
+        }
+        stack.push(i);
+      }
+      return maxArea;
+    }
+}
+二叉树-java
+class Solution {
+    private TreeNode pre = null;
+    private int res = Integer.MAX_VALUE;
+    public int minDiffInBST(TreeNode root) {
+        dfs(root);
+        return res;
+    }
+    private void dfs(TreeNode root){
+        if(root == null) return;
+        dfs(root.left);
+        if(pre != null){
+            res = Math.min(root.val-pre.val,res);
+        }
+        pre = root;
+        dfs(root.right);
+    }
+}
